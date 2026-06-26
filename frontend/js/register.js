@@ -5,18 +5,41 @@ async function register() {
     const name = document.getElementById("name").value.trim();
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
-    const confirmPassword =
-    document.getElementById("confirmPassword").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
 
-      if(name==="" || email==="" || password===""){
-         alert("Please fill all fields");
-         return;
-       }
+    // Check empty fields
+    if (name === "" || email === "" || password === "" || confirmPassword === "") {
+        alert("Please fill all fields");
+        return;
+    }
 
-       if(password!==confirmPassword){
-         alert("Passwords do not match");
-         return;
-       }
+    // Check password match
+    if (password !== confirmPassword) {
+        alert("Passwords do not match");
+        return;
+    }
+
+    // Email validation
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailPattern.test(email)) {
+        alert("Enter a valid email");
+        return;
+    }
+
+    // Password validation
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+
+    if (!passwordPattern.test(password)) {
+        alert(
+            "Password must contain:\n\n" +
+            "• Minimum 8 characters\n" +
+            "• One uppercase letter\n" +
+            "• One lowercase letter\n" +
+            "• One number"
+        );
+        return;
+    }
 
     try {
 
@@ -51,39 +74,24 @@ async function register() {
 
     } catch (error) {
 
+        console.error(error);
         alert("Server Error");
 
     }
 
 }
-const emailPattern =
-/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-if(!emailPattern.test(email)){
-    alert("Enter valid email");
-    return;
-}
-
-const passwordPattern =
-/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
-
-if(!passwordPattern.test(password)){
-    alert(
-"Password must contain:\n\
-• 8 characters\n\
-• Uppercase\n\
-• Lowercase\n\
-• Number"
-);
-    return;
-}
 
 function togglePassword() {
+
     const password = document.getElementById("password");
     const confirmPassword = document.getElementById("confirmPassword");
 
-    const type = password.type === "password" ? "text" : "password";
+    if (password.type === "password") {
+        password.type = "text";
+        confirmPassword.type = "text";
+    } else {
+        password.type = "password";
+        confirmPassword.type = "password";
+    }
 
-    password.type = type;
-    confirmPassword.type = type;
 }
